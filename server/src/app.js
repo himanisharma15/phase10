@@ -1,0 +1,34 @@
+import express from 'express';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import helmet from 'helmet';
+import morgan from 'morgan';
+import { env } from './config/env.js';
+import healthRouter from './routes/health.js';
+import authRouter from './routes/auth.js';
+import incidentRouter from './routes/incidents.js';
+import aiRouter from './routes/ai.js';
+import analyticsRouter from './routes/analytics.js';
+import { errorHandler, notFound } from './middleware/error.js';
+
+export const createApp = () => {
+  const app = express();
+  app.use(helmet());
+  app.use(cors({ origin: env.CLIENT_URL, credentials: true }));
+  app.use(express.json({ limit: '1mb' }));
+  app.use(cookieParser());
+  app.use(morgan(env.NODE_ENV === 'production' ? 'combined' : 'dev'));
+  app.use(healthRouter);
+  app.use('/api', healthRouter);
+  app.use(authRouter);
+  app.use('/api', authRouter);
+  app.use(incidentRouter);
+  app.use('/api', incidentRouter);
+  app.use(aiRouter);
+  app.use('/api', aiRouter);
+  app.use(analyticsRouter);
+  app.use('/api', analyticsRouter);
+  app.use(notFound);
+  app.use(errorHandler);
+  return app;
+};

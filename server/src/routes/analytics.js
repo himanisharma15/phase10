@@ -1,0 +1,1 @@
+import { Router } from 'express'; import { requireAuth } from '../middleware/auth.js'; import { analytics } from '../controllers/analyticsController.js'; const router = Router(); router.get('/analytics', requireAuth, analytics); export default router;

@@ -1,0 +1,1 @@
+export default function Button({ children, variant = 'primary', loading, ...props }) { return <button className={`button button-${variant}`} disabled={loading || props.disabled} {...props}>{loading ? 'Working...' : children}</button>; }

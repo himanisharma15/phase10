@@ -1,0 +1,13 @@
+import { Router } from 'express';
+import rateLimit from 'express-rate-limit';
+import { signup, login, logout, me } from '../controllers/authController.js';
+import { validate } from '../middleware/validate.js';
+import { signupSchema, loginSchema } from '../validators/auth.js';
+import { requireAuth } from '../middleware/auth.js';
+const limiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 30 });
+const router = Router();
+router.post('/auth/signup', limiter, validate(signupSchema), signup);
+router.post('/auth/login', limiter, validate(loginSchema), login);
+router.post('/auth/logout', logout);
+router.get('/auth/me', requireAuth, me);
+export default router;

@@ -1,0 +1,13 @@
+import { Router } from 'express';
+import { requireAuth } from '../middleware/auth.js';
+import { validate } from '../middleware/validate.js';
+import { incidentSchema, incidentPatchSchema } from '../validators/incident.js';
+import { createIncident, listIncidents, getIncident, updateIncident, deleteIncident } from '../controllers/incidentController.js';
+const router = Router();
+router.use(requireAuth);
+router.post('/incidents', validate(incidentSchema), createIncident);
+router.get('/incidents', listIncidents);
+router.get('/incidents/:id', getIncident);
+router.patch('/incidents/:id', validate(incidentPatchSchema), updateIncident);
+router.delete('/incidents/:id', deleteIncident);
+export default router;
